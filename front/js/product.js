@@ -1,6 +1,5 @@
 
-// 2 : Récupérer l'info de ce produit
-// 3 : Afficher le produit dans le DOM 
+
 // 4 : Créer le panier 
 
 //  product.html?id=42
@@ -12,6 +11,7 @@ url = new URL(url);
 let id = url.searchParams.get('id');
 let colorInput = document.getElementById('colors');
 let quantity = document.getElementById('quantity');
+let button = document.getElementById("addToCart");
 
 // Récupération des infos de produit
 function getProduct(id){
@@ -25,7 +25,7 @@ function getProduct(id){
     })
      // Affichage des informations dans le DOM
     .then(function (product){
-        //debugger;
+        
         document.getElementById("title").innerText = product.name;
         const productImage = document.createElement('img');
         productImage.src = product.imageUrl;
@@ -42,14 +42,18 @@ function getProduct(id){
 
         for( let color of product.colors){
    
-        let option = document.createElement('option');
-        option.value = color;
-        option.innerText = color;
-        console.log(product)
+            let option = document.createElement('option');
+            option.value = color;
+            option.innerText = color;
+            console.log(product)
 
-        colorInput.appendChild(option)
+            colorInput.appendChild(option)
 
         }
+
+      
+
+      
 
     })
     .catch((error) => console.log(error))
@@ -61,7 +65,7 @@ getProduct(id);
 
 
 // 1 : Mettre en place une vérification lors de la soumission ( Couleur / Quantité ) selectionner. 
-    // a  : En cas d'erreur une simple alert("ALERT")
+    // a  : En cas d'erreur une simple alert("ALERT") -> condition if / else ?
 
 // 2 : Si pas de prblm sur "1" dans ce cas créer le localstorage avec le produit
     // a : Vérifier si le localstorage existe ? 
@@ -86,15 +90,29 @@ getProduct(id);
 
 
 
-let button = document.getElementById('addToCart');
+// Vérification couleur/quantité et ajout au panier
 
 button.addEventListener('click', function(){
  
     let color = colorInput.value;
-    let qty = parseInt(quantity.value)
+    let qty = parseInt(quantity.value);
+    
 
     console.log(qty)
 
+    if (color === "" || qty === 0) {
+        alert("Vous devez sélectionner une couleur et une quantité");
+    } else {
+        alert("Le produit a été ajouté au panier !");
+    }
+
+    addToCart(qty);
+    
+    
+}
+    
+
+)
 
 
-})
+
