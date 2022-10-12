@@ -64,8 +64,7 @@ getProduct(id);
 
 
 
-// 1 : Mettre en place une vérification lors de la soumission ( Couleur / Quantité ) selectionner. 
-    // a  : En cas d'erreur une simple alert("ALERT") -> condition if / else ?
+
 
 // 2 : Si pas de prblm sur "1" dans ce cas créer le localstorage avec le produit
     // a : Vérifier si le localstorage existe ? 
@@ -86,6 +85,8 @@ getProduct(id);
 
 // PRODUIT A : 1 - YELLOW  ----  6 exemplaires - Yellow 
 /// Produit A : 3 examplaires - Black
+
+
 
 
 
