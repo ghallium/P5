@@ -38,9 +38,9 @@ getProduct(id);
 
 button.addEventListener("click", function () {
   let color = colorInput.value;
-  let qty = parseInt(quantity.value);
+  let quantityValue = parseInt(quantity.value);
 
-  if (color === "" || qty === 0) {s
+  if (color === "" || quantityValue === 0) {s
     alert("Vous devez sélectionner une couleur et une quantité");
   } else {
     alert("Le produit a été ajouté au panier !");
@@ -49,7 +49,7 @@ button.addEventListener("click", function () {
   // Stockage de l'id, quantité, image et couleur du produit dans le localStorage
   let productOrder = {
     id: id,
-    quantity: qty,
+    quantity: quantityValue,
     image: document.getElementById("productImage").src,
     title: title.innerText,
     color: color,
@@ -63,7 +63,7 @@ button.addEventListener("click", function () {
     cart = JSON.parse(cart);
   }
 
-  console.log(cart);
+  console.log(productOrder);
   let newItem = true;
   //    if(...) Si le produit existe déjà avec la même couleurs dans ce cas faut incrementer la valeur
   // produit.quantity += productOrder.quantity
