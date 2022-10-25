@@ -23,6 +23,7 @@ for (let item of cart) {
         totalQuantity += item.quantity;
         totalPrice += product.price * item.quantity;
       }
+      
       document.getElementById(
         "cart__items"
       ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
@@ -59,6 +60,17 @@ for (let item of cart) {
       }
 
       // for pour ajouter le btn de delete
+      /*function removeItem {
+        let items = cart();
+
+        for (i = 0; i < items.length; i++) {
+          if (id === items[i][0] && color === items[i[1]]) {
+            items.splice(i, 1);
+            localStorage.setItem("products", JSON.stringify(items));
+            window.location.reload();
+          }
+        }
+      }*/
 
     })
 
@@ -75,8 +87,10 @@ function updateQuantity(element, event) {
     if (cart[j].id === productId && cart[j].color === color) {
       cart[j].quantity = parseInt(newQuantity);
       localStorage.setItem("products", JSON.stringify(cart));
+      console.log(newQuantity);
     }
   }
 }
 
 // function (removeProduct) -> AddEventListener(click) puis fonction qui décrémente ?
+// Les produits ne sont pas encore stockés par types et toutes les couleurs dispo s'affichent 
