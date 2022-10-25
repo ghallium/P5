@@ -4,8 +4,21 @@ let totalPrice = 0;
 let totalQuantityElt = document.getElementById("totalQuantity");
 let totalPriceElt = document.getElementById("totalPrice");
 let inputQuantity = document.getElementsByClassName("itemQuantity");
+let error;
+let inputs = document.getElementsByTagName("input");
+
+// Validation formulaire
+
+for (let i =0; i < inputs.length; i++) {
+  console.log(inputs[i]);
+  if (!inputs[i].value) {
+    erreur = "Veuillez renseigner tous les champs";
+  }
+}
 
 cart = JSON.parse(cart);
+
+// Gestion du panier
 
 if (cart === null) {
   console.log("je suis vide");
@@ -23,7 +36,7 @@ for (let item of cart) {
         totalQuantity += item.quantity;
         totalPrice += product.price * item.quantity;
       }
-      
+
       document.getElementById(
         "cart__items"
       ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
