@@ -6,48 +6,19 @@ let totalPriceElt = document.getElementById("totalPrice");
 let inputQuantity = document.getElementsByClassName("itemQuantity");
 let error;
 let form = document.getElementsByTagName("input");
-
-// Validation formulaire
-
-/*for (let i =0; i < inputs.length; i++) {
-  console.log(inputs[i]);
-  if (!inputs[i].value) {
-    erreur = "Veuillez renseigner tous les champs";
-  }
-}*/
-
-form.email.addEventListener('change', function() {
-  validEmail(this);
-});
-
-// Création RegExp pour validation email 
-const validEmail = function(inputEmail) {
-let emailRegExp = new RegExp(
-  '^[a-zA-20-9.-_]+[@]{1}^[a-zA-20-9.-_]+[.]{1}[a-z]{2,10}$', 'g'
-);
-
-// Test des expressions régulières 
-let testEmail = emailRegExp.test(inputEmail.value);
-
-if (testEmail == true) {
-  alert('Votre adresse email est valide');
-} else {
-  alert('Merci de saisir une adresse email valide');
-}
-
-}
-
-// Gestion du panier
+let regexEmail = new RegExp(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
+let regexNamesAndCityAddress = new RegExp(/^[A-Za-z]{2,}$/);
+let deleteItem = document.getElementsByClassName('deleteItem');
 
 cart = JSON.parse(cart);
-
-
 
 if (cart === null) {
   console.log("je suis vide");
 }
 
+
 for (let item of cart) {
+  console.log('toto')
   fetch("http://localhost:3000/api/products/" + item.id)
     .then(function (res) {
       if (res.ok) {
@@ -58,7 +29,7 @@ for (let item of cart) {
       if (item.quantity > 0) {
         totalQuantity += item.quantity;
         totalPrice += product.price * item.quantity;
-      }
+      } 
 
       document.getElementById(
         "cart__items"
@@ -70,7 +41,7 @@ for (let item of cart) {
                   <div class="cart__item__content__description">
                         <h2>${product.name}</h2>
           
-                    <p>${product.colors}</p>
+                    <p>${item.color}</p>
                     <p>${product.price} €</p>
                   </div>
                   <div class="cart__item__content__settings">
@@ -94,26 +65,18 @@ for (let item of cart) {
           updateQuantity(this, event);
         });
       }
-
-      // for pour ajouter le btn de delete
-      /*function removeItem {
-        let items = cart();
-
-        for (i = 0; i < items.length; i++) {
-          if (id === items[i][0] && color === items[i[1]]) {
-            items.splice(i, 1);
-            localStorage.setItem("products", JSON.stringify(items));
-            window.location.reload();
-          }
-        }
-      }*/
-
     })
-
-
+    
+    .then(function(){
+      for (let i = 0; i < deleteItem.length; i++) {
+        deleteItem[i].addEventListener('click' , function (){
+          deleteFromCart(this)
+        })
+      }
+    })
 }
 
-function updateQuantity(element, event) {
+function updateQuantity(element, event, totalPrice) {
   let newArticle = element.closest("article");
   let newQuantity = event.target.value;
 
@@ -128,5 +91,67 @@ function updateQuantity(element, event) {
   }
 }
 
+
+function deleteFromCart(element){
+  let newArticle = element.closest("article");
+
+  console.log(newArticle);
+  let productId = newArticle.dataset.id;
+  let color = newArticle.dataset.color;
+
+  for (let u = 0; u < cart.length; u++) {
+    if (cart[u].id === productId && cart[u].color === color) {
+      cart.splice(u, 1);
+      localStorage.setItem("products", JSON.stringify(cart));
+    }
+  }
+  newArticle.remove()  
+
+}
+
+/*
+function calculTotal(productId, quantity, totalPrice){
+  console.log(totalPrice)
+  fetch("http://localhost:3000/api/products/" + productId)
+    .then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+  .then(function(product) {
+    let price = product.price;
+    let totalPrice = price * product.quantity
+    let totalLocal = parseInt(totalPrice); // Valeur actuel du localstorage au moment du chargement de la page
+
+  })
+  .catch((error ) => {
+    console.log(error)
+  })
+  */
+
+
+
+
+
 // function (removeProduct) -> AddEventListener(click) puis fonction qui décrémente ?
-// Les produits ne sont pas encore stockés par types et toutes les couleurs dispo s'affichent 
+// Les produits ne sont pas encore stockés par types et toutes les couleurs dispo s'affichent
+
+let inputEmail = document.getElementById("email");
+inputEmail.addEventListener("focusout", function () {
+  emailValidator(this.value);
+});
+
+function emailValidator(value) {
+  let errorEmail = document.getElementById("emailErrorMsg");
+
+  if (!regexEmail.test(value)) {
+    errorEmail.innerText = "Erreur email incorrect";
+    return false;
+  } else {
+    errorEmail.innerText = "";
+    return true;
+  }
+}
+
+
+
