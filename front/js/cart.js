@@ -5,20 +5,43 @@ let totalQuantityElt = document.getElementById("totalQuantity");
 let totalPriceElt = document.getElementById("totalPrice");
 let inputQuantity = document.getElementsByClassName("itemQuantity");
 let error;
-let inputs = document.getElementsByTagName("input");
+let form = document.getElementsByTagName("input");
 
 // Validation formulaire
 
-for (let i =0; i < inputs.length; i++) {
+/*for (let i =0; i < inputs.length; i++) {
   console.log(inputs[i]);
   if (!inputs[i].value) {
     erreur = "Veuillez renseigner tous les champs";
   }
+}*/
+
+form.email.addEventListener('change', function() {
+  validEmail(this);
+});
+
+// Création RegExp pour validation email 
+const validEmail = function(inputEmail) {
+let emailRegExp = new RegExp(
+  '^[a-zA-20-9.-_]+[@]{1}^[a-zA-20-9.-_]+[.]{1}[a-z]{2,10}$', 'g'
+);
+
+// Test des expressions régulières 
+let testEmail = emailRegExp.test(inputEmail.value);
+
+if (testEmail == true) {
+  alert('Votre adresse email est valide');
+} else {
+  alert('Merci de saisir une adresse email valide');
 }
+
+}
+
+// Gestion du panier
 
 cart = JSON.parse(cart);
 
-// Gestion du panier
+
 
 if (cart === null) {
   console.log("je suis vide");
