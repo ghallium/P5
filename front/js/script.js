@@ -2,6 +2,7 @@ fetch('http://localhost:3000/api/products')
 .then((response) => response.json())
 .then(function (resultApi){
 
+    
     for(let product of resultApi){
         document.getElementById('items').innerHTML += 
         `<a href="./product.html?id=${product._id}">
@@ -12,7 +13,7 @@ fetch('http://localhost:3000/api/products')
             </article>
         </a>`
     }
-
+    console.log(resultApi)
 })
 
 
