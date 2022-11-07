@@ -1,8 +1,8 @@
 let cart = localStorage.getItem("products");
+let totalQuantityElt = document.getElementById('totalQuantity');
+let totalPriceElt = document.getElementById('totalPrice');
 let totalQuantity = 0;
 let totalPrice = 0;
-let totalQuantityElt = document.getElementById("totalQuantity");
-let totalPriceElt = document.getElementById("totalPrice");
 let inputQuantity = document.getElementsByClassName("itemQuantity");
 let error;
 let form = document.getElementsByTagName("input");
@@ -10,6 +10,7 @@ let regexEmail = new RegExp(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
 let regexNamesAndCity = new RegExp(/^[A-Za-z]{2,}$/);
 let regexAddress = new RegExp(/^\s*\S+(?:\s+\S+){2}/);
 let deleteItem = document.getElementsByClassName('deleteItem');
+
 
 
 cart = JSON.parse(cart);
@@ -49,7 +50,7 @@ for (let item of cart) {
                   <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
                       <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}" data-old-value="${item.quantity}">
                     </div>
                     <div class="cart__item__content__settings__delete">
                       <p class="deleteItem">Supprimer</p>
@@ -84,6 +85,12 @@ function updateQuantity(element, event, totalPrice) {
 
   let productId = newArticle.dataset.id;
   let color = newArticle.dataset.color;
+
+
+  let oldValue = element.dataset.oldValue;
+  element.dataset.oldValue = newQuantity;
+
+  calculateTotal(productId, oldValue, newQuantity);
   for (let j = 0; j < cart.length; j++) {
     if (cart[j].id === productId && cart[j].color === color) {
       cart[j].quantity = parseInt(newQuantity);
@@ -96,10 +103,11 @@ function updateQuantity(element, event, totalPrice) {
 
 function deleteFromCart(element){
   let newArticle = element.closest("article");
-
-  console.log(newArticle);
   let productId = newArticle.dataset.id;
   let color = newArticle.dataset.color;
+  let input = element.closest('article').querySelector('.itemQuantity')
+  let oldValue = input.dataset.oldValue;
+  calculateTotal(productId, oldValue, 0)
 
   for (let u = 0; u < cart.length; u++) {
     if (cart[u].id === productId && cart[u].color === color) {
@@ -111,7 +119,7 @@ function deleteFromCart(element){
 
 }
 
-
+/*
 function calculTotal(productId, quantity, totalPrice){
   console.log(totalPrice)
   fetch("http://localhost:3000/api/products/" + productId)
@@ -130,7 +138,51 @@ function calculTotal(productId, quantity, totalPrice){
     console.log(error)
   })
 }
+*/
 
+
+function calculateTotal(productId, oldQuantity, newQuantity) {
+  fetch("http://localhost:3000/api/products/" + productId)
+  .then(function(res) {
+      if (res.ok) {
+          return res.json();
+      }
+  })
+  .then(function(product) {
+      let quantityDifference = 0;
+      let price = product.price;
+      let priceDifference = 0;
+      newQuantity = parseInt(newQuantity);
+      oldQuantity = parseInt(oldQuantity);
+
+      // Cas où l'ancienne et la nouvelle quantité sont > 0 -> traitement normal
+      if (newQuantity > 0 && oldQuantity > 0) {
+          quantityDifference = newQuantity - oldQuantity;
+          priceDifference = quantityDifference * price;
+          
+      // Cas où l'ancienne quantité est < 0 et la nouvelle quantité est > 0 -> différence = nouvelle quantité
+      } else if (newQuantity > 0 && oldQuantity < 0) {
+          quantityDifference = newQuantity;
+          priceDifference = quantityDifference * price;
+
+      // Cas où l'ancienne quantité est > 0 et la nouvelle quantité est < 0 -> 
+      // différence = on soustrait l'ancienne quantité
+      } else if (newQuantity < 0 && oldQuantity > 0) {
+          quantityDifference = - oldQuantity;
+          priceDifference = quantityDifference * price;
+      }
+
+
+/// déconne ici vérifier le HTML rendu 
+console.log(totalQuantityElt)
+console.log(totalPriceElt)
+console.log(quantityDifference)
+console.log(priceDifference)
+
+      totalQuantityElt.innerText = parseInt(totalQuantityElt.innerText) + quantityDifference;
+      totalPriceElt.innerText = parseInt(totalPriceElt.innerText) + priceDifference;
+  })
+}
 
 
 // VALIDATION FORMULAIRE
@@ -224,6 +276,37 @@ function cityValidator(value) {
   }
 
 }
+
+let submitButton = document.getElementById("order");
+submitButton.addEventListener("click", function() {
+  let validationError = false;
+
+  if (emailValidator(email) === false) {
+    validationError = true;
+  }
+
+  if (firstNameValidator(firstName) === false) {
+    validationError = true;
+  }
+
+  if (lastNameValidator(lastName) === false) {
+    validationError = true;
+  }
+
+  if (addressValidator(address) === false) {
+    validationError = true;
+  }
+
+  if (cityValidator(city) === false) {
+    validationError = true;
+    
+  }
+  
+})
+
+
+
+
 
 // ENVOI FORMULAIRE REQUETE POST 
 
