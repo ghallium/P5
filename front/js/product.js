@@ -36,6 +36,8 @@ function getProduct(id) {
 
 getProduct(id);
 
+// AJOUT PRODUIT VERS LE PANIER
+
 button.addEventListener("click", function () {
    let color = colorInput.value;
    let quantityValue = parseInt(quantity.value);

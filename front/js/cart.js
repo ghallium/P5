@@ -11,8 +11,24 @@ let regexNamesAndCity = new RegExp(/^[A-Za-z]{2,}$/);
 let regexAddress = new RegExp(/^\s*\S+(?:\s+\S+){2}/);
 let deleteItem = document.getElementsByClassName("deleteItem");
 let inputEmail = document.getElementById("email");
+let inputFirstName = document.getElementById("firstName");
+let inputLastName = document.getElementById("lastName");
+let inputAddress = document.getElementById("address");
+let inputCity = document.getElementById("city");
 
 cart = JSON.parse(cart);
+
+// AFFICHAGE DES PRODUITS DU PANIER
+
+/*
+
+   ____           _   
+  / ___|__ _ _ __| |_ 
+ | |   / _` | '__| __|
+ | |__| (_| | |  | |_ 
+  \____\__,_|_|   \__|
+
+*/
 
 if (cart === null) {
    console.log("je suis vide");
@@ -74,6 +90,8 @@ for (let item of cart) {
          }
       });
 }
+
+// GESTION DES QUANTITES - SUPPRIMER UN ARTICLE DU PANIER
 
 function updateQuantity(element, event, totalPrice) {
    let newArticle = element.closest("article");
@@ -182,7 +200,7 @@ function emailValidator(value) {
    }
 }
 
-let inputFirstName = document.getElementById("firstName");
+
 inputFirstName.addEventListener("focusout", function () {
    firstNameValidator(this.value);
 });
@@ -199,7 +217,7 @@ function firstNameValidator(value) {
    }
 }
 
-let inputLastName = document.getElementById("lastName");
+
 inputLastName.addEventListener("focusout", function () {
    lastNameValidator(this.value);
 });
@@ -216,7 +234,7 @@ function lastNameValidator(value) {
    }
 }
 
-let inputAddress = document.getElementById("address");
+
 inputAddress.addEventListener("focusout", function () {
    addressValidator(this.value);
 });
@@ -233,7 +251,7 @@ function addressValidator(value) {
    }
 }
 
-let inputCity = document.getElementById("city");
+
 inputCity.addEventListener("focusout", function () {
    cityValidator(this.value);
 });
@@ -249,6 +267,8 @@ function cityValidator(value) {
       return true;
    }
 }
+
+// ENVOI DES DONNEES PANIER ET FORMULAIRE
 
 let submitButton = document.getElementById("order");
 submitButton.addEventListener("click", function (e) {
