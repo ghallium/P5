@@ -1,9 +1,8 @@
+// Récupération produits API et affichage dans le DOM
 fetch('http://localhost:3000/api/products')
 .then((response) => response.json())
 .then(function (resultApi){
-
-    
-    for(let product of resultApi){
+     for(let product of resultApi){
         document.getElementById('items').innerHTML += 
         `<a href="./product.html?id=${product._id}">
             <article>
@@ -15,6 +14,4 @@ fetch('http://localhost:3000/api/products')
     }
     console.log(resultApi)
 })
-
-
 .catch((error) => console.log(error))
